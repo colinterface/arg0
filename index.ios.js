@@ -6,7 +6,8 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  StatusBar
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -21,6 +22,10 @@ export default class arg0 extends Component {
         longitudeDelta: 0.0421,
       },
     };
+  }
+
+  componentDidMount() {
+    StatusBar.setBarStyle('light-content', true);
   }
 
   onRegionChange = (region) => {
@@ -46,6 +51,7 @@ export default class arg0 extends Component {
   render() {
     return (
       <View style={styles.root}>
+        <View style={styles.header} />
         <MapView
           style={styles.map}
           region={this.state.region}
@@ -77,10 +83,15 @@ export default class arg0 extends Component {
 const styles = StyleSheet.create({
   root: {
     position: 'absolute',
-    top: 20,
+    top: 0,
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  header: {
+    flex: 0,
+    height: 20,
+    backgroundColor: '#222',
   },
   map: {
     flex: 1,
