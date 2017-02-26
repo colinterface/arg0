@@ -15,25 +15,33 @@ export default class arg0 extends Component {
   constructor() {
     super();
     this.state = {
-      region: {
+      mapRegion: {
         latitude: 37.708979,
         longitude: -122.376008,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
+      userLocation: null,
     };
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
+    setInterval(() => {
+      navigator.geolocation.getCurrentPosition(({ coords }) =>{
+        console.log(coords);
+        this.setState({ userLocation: coords });
+      });
+    }, 1000);
+
   }
 
-  onRegionChange = (region) => {
-    this.setState({ region });
+  onRegionChange = (mapRegion) => {
+    this.setState({ mapRegion });
   }
 
   getMarkerImage = () => {
-    const { longitudeDelta } = this.state.region;
+    const { longitudeDelta } = this.state.mapRegion;
     let imageIndex;
 
     if (longitudeDelta < 0.01) {
@@ -49,12 +57,13 @@ export default class arg0 extends Component {
   }
 
   render() {
+    const { userLocation } = this.state;
     return (
       <View style={styles.root}>
         <View style={styles.header} />
         <MapView
           style={styles.map}
-          region={this.state.region}
+          region={this.state.mapRegion}
           onRegionChange={this.onRegionChange}
           showsPointsOfInterest={false}
           showsUserLocation={true}
@@ -73,7 +82,11 @@ export default class arg0 extends Component {
         </MapView>
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {'ENTER THE PORTAL'}
+            {
+              userLocation
+              ? `${userLocation.latitude}, ${userLocation.longitude}`
+              : ''
+            }
           </Text>
         </View>
       </View>
