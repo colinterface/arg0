@@ -57,7 +57,8 @@ export default class arg0 extends Component {
           region={this.state.region}
           onRegionChange={this.onRegionChange}
           showsPointsOfInterest={false}
-          followsUserLocation={true}
+          showsUserLocation={true}
+          followsUserLocation={false}
           mapType={'hybrid'}
         >
           <MapView.Marker
