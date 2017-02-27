@@ -7,9 +7,20 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import MapView from 'react-native-maps';
+import Sound from 'react-native-sound';
+Sound.setCategory('Playback');
+
+const audio = new Sound('0.mp3', Sound.MAIN_BUNDLE);
+const story = [
+  {
+    audio,
+
+  }
+];
 
 export default class arg0 extends Component {
   constructor() {
@@ -22,18 +33,18 @@ export default class arg0 extends Component {
         longitudeDelta: 0.0421,
       },
       userLocation: null,
+      playingAudio: false,
     };
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition(({ coords }) =>{
-        console.log(coords);
-        this.setState({ userLocation: coords });
-      });
-    }, 1000);
-
+    // setInterval(() => {
+    //   navigator.geolocation.getCurrentPosition(({ coords }) =>{
+    //     console.log(coords);
+    //     this.setState({ userLocation: coords });
+    //   });
+    // }, 1000);
   }
 
   onRegionChange = (mapRegion) => {
@@ -58,6 +69,7 @@ export default class arg0 extends Component {
 
   render() {
     const { userLocation } = this.state;
+
     return (
       <View style={styles.root}>
         <View style={styles.header} />
@@ -68,7 +80,10 @@ export default class arg0 extends Component {
           showsPointsOfInterest={false}
           showsUserLocation={true}
           followsUserLocation={false}
-          mapType={'hybrid'}
+          mapType={'satellite'}
+          legalLabelInsets={{
+            left: -50,
+          }}
         >
           <MapView.Marker
             coordinate={{
@@ -81,13 +96,49 @@ export default class arg0 extends Component {
           />
         </MapView>
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            {
-              userLocation
-              ? `${userLocation.latitude}, ${userLocation.longitude}`
-              : ''
-            }
-          </Text>
+          <TouchableOpacity
+            onPress={() =>{
+              this.setState({
+                mapRegion: {
+                  latitude: 37.708979,
+                  longitude: -122.376008,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                },
+              });
+            }}
+
+
+          >
+            <Text style={styles.footerText}>
+              {'Center On Portal'}
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              height: 40,
+              alignSelf: 'stretch',
+              backgroundColor: 'white',
+            }}
+          />
+          <TouchableOpacity
+            onPress={() =>{
+              this.setState({
+                playing: !this.state.playing,
+              });
+
+              if (this.state.playing) {
+                story[0].audio.pause();
+              } else {
+                story[0].audio.play();
+              }
+
+            }}
+          >
+            <Text style={styles.footerText}>
+              {this.state.playing ? '||' : '|>'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -96,11 +147,7 @@ export default class arg0 extends Component {
 
 const styles = StyleSheet.create({
   root: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   header: {
     flex: 0,

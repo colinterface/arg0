@@ -38,6 +38,8 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8C24B56DF01F4E719C29D486 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8FE83780994E868998D6D9 /* libRNSound.a */; };
+		C3FB4D791E63F825003D1D08 /* jumpsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = C3FB4D781E63F825003D1D08 /* jumpsound.wav */; };
+		C3FB4D7B1E63FE13003D1D08 /* 0.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3FB4D7A1E63FE13003D1D08 /* 0.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -274,6 +276,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9CB661360FB841D58C9AB3D5 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		A97A1A59B4F747219FAD61A6 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
+		C3FB4D781E63F825003D1D08 /* jumpsound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = jumpsound.wav; path = ../../../UnityTutorials/WalkingSim/Assets/Sounds/jumpsound.wav; sourceTree = "<group>"; };
+		C3FB4D7A1E63FE13003D1D08 /* 0.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0.mp3; path = "../../../tunes/France Gall - Lounge Legends (2002)/0.mp3"; sourceTree = "<group>"; };
 		D48F3FC3FC5E47109D27BCF3 /* RNSound.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -487,6 +491,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C3FB4D7A1E63FE13003D1D08 /* 0.mp3 */,
+				C3FB4D781E63F825003D1D08 /* jumpsound.wav */,
 				13B07FAE1A68108700A75B9A /* arg0 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* arg0Tests */,
@@ -905,6 +911,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3FB4D7B1E63FE13003D1D08 /* 0.mp3 in Resources */,
+				C3FB4D791E63F825003D1D08 /* jumpsound.wav in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
