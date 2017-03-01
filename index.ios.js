@@ -15,14 +15,10 @@ import Sound from 'react-native-sound';
 Sound.setCategory('Playback');
 
 const audio = new Sound('0.mp3', Sound.MAIN_BUNDLE);
-const story = [
-  {
-    audio,
-
-  }
-];
+const story = [{ audio }];
 
 export default class arg0 extends Component {
+
   constructor() {
     super();
     this.state = {
@@ -34,17 +30,14 @@ export default class arg0 extends Component {
       },
       userLocation: null,
       playingAudio: false,
+      audioTime: 0,
     };
+
+    this.audioTimeInterval = null;
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
-    // setInterval(() => {
-    //   navigator.geolocation.getCurrentPosition(({ coords }) =>{
-    //     console.log(coords);
-    //     this.setState({ userLocation: coords });
-    //   });
-    // }, 1000);
   }
 
   onRegionChange = (mapRegion) => {
@@ -67,9 +60,42 @@ export default class arg0 extends Component {
 
   }
 
+  playAudio = () => {
+
+    this.setState({ playingAudio: true });
+
+    this.audioTimeInterval = setInterval(() =>{
+      story[0].audio.getCurrentTime((audioTime) =>{
+        this.setState({ audioTime });
+      });
+    }, 1000);
+
+    story[0].audio.play(() =>{
+      // set playing to false when sound ends
+      this.setState({ playingAudio: false})
+      clearInterval(this.audioTimeInterval);
+    });
+  }
+
+  pauseAudio = () => {
+    this.setState({ playingAudio: false });
+    story[0].audio.pause();
+    clearInterval(this.audioTimeInterval);
+  }
+
+  jumpAudio = (deltaSeconds) => {
+    const audioTime = Math.min(
+      story[0].audio.getDuration(),
+      this.state.audioTime + deltaSeconds
+    );
+    story[0].audio.setCurrentTime(audioTime);
+    this.setState({ audioTime });
+  }
+
+
   render() {
     const { userLocation } = this.state;
-
+    console.log(this.state.audioTime);
     return (
       <View style={styles.root}>
         <View style={styles.header} />
@@ -120,23 +146,33 @@ export default class arg0 extends Component {
               alignSelf: 'stretch',
               backgroundColor: 'white',
             }}
-          />
+          >
+            <Text>
+              {`${Math.round(this.state.audioTime)} / ${Math.round(story[0].audio.getDuration())}`}
+            </Text>
+          </View>
           <TouchableOpacity
-            onPress={() =>{
-              this.setState({
-                playing: !this.state.playing,
-              });
-
-              if (this.state.playing) {
-                story[0].audio.pause();
+            onPress={() => {
+              console.log(this.state);
+              if (this.state.playingAudio) {
+                this.pauseAudio();
               } else {
-                story[0].audio.play();
+                this.playAudio();
               }
 
             }}
           >
             <Text style={styles.footerText}>
-              {this.state.playing ? '||' : '|>'}
+              {this.state.playingAudio ? '| |' : '|>'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.jumpAudio(15);
+            }}
+          >
+            <Text style={styles.footerText}>
+              {'15 >>'}
             </Text>
           </TouchableOpacity>
         </View>
