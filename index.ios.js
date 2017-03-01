@@ -9,6 +9,7 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  LayoutAnimation,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import Sound from 'react-native-sound';
@@ -66,6 +67,7 @@ export default class arg0 extends Component {
 
     this.audioTimeInterval = setInterval(() =>{
       story[0].audio.getCurrentTime((audioTime) =>{
+        LayoutAnimation.easeInEaseOut();
         this.setState({ audioTime });
       });
     }, 1000);
@@ -89,13 +91,14 @@ export default class arg0 extends Component {
       this.state.audioTime + deltaSeconds
     );
     story[0].audio.setCurrentTime(audioTime);
+    LayoutAnimation.easeInEaseOut();
     this.setState({ audioTime });
   }
 
 
   render() {
     const { userLocation } = this.state;
-    console.log(this.state.audioTime);
+
     return (
       <View style={styles.root}>
         <View style={styles.header} />
@@ -133,48 +136,66 @@ export default class arg0 extends Component {
                 },
               });
             }}
-
-
           >
             <Text style={styles.footerText}>
-              {'Center On Portal'}
+              {'Enter The Portal'}
             </Text>
           </TouchableOpacity>
-          <View
-            style={{
-              height: 40,
-              alignSelf: 'stretch',
-              backgroundColor: 'white',
-            }}
-          >
-            <Text>
+          <View style={styles.audioProgressBar}>
+            <View
+              style={{
+                alignSelf: 'stretch',
+                flex: this.state.audioTime / story[0].audio.getDuration(),
+                backgroundColor: 'darkgoldenrod',
+              }}
+            />
+            <View
+              style={{
+                flex: 1 - this.state.audioTime / story[0].audio.getDuration(),
+              }}
+            />
+          <View style={styles.footerRow}>
+            <Text style={styles.footerText}>
               {`${Math.round(this.state.audioTime)} / ${Math.round(story[0].audio.getDuration())}`}
             </Text>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              console.log(this.state);
-              if (this.state.playingAudio) {
-                this.pauseAudio();
-              } else {
-                this.playAudio();
-              }
 
-            }}
-          >
-            <Text style={styles.footerText}>
-              {this.state.playingAudio ? '| |' : '|>'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.jumpAudio(15);
-            }}
-          >
-            <Text style={styles.footerText}>
-              {'15 >>'}
-            </Text>
-          </TouchableOpacity>
+
+          </View>
+          <View style={styles.footerRow}>
+            <TouchableOpacity
+              onPress={() => {
+                this.jumpAudio(-15);
+              }}
+            >
+              <Text style={styles.footerText}>
+                {'< 15'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (this.state.playingAudio) {
+                  this.pauseAudio();
+                } else {
+                  this.playAudio();
+                }
+              }}
+            >
+              <Text style={styles.footerText}>
+                {this.state.playingAudio ? '| |' : '|>'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.jumpAudio(15);
+              }}
+            >
+              <Text style={styles.footerText}>
+                {'15 >'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
       </View>
     );
@@ -197,11 +218,24 @@ const styles = StyleSheet.create({
     flex: 0,
     alignItems: 'center',
     backgroundColor: '#222',
-    padding: 10,
+  },
+  footerRow: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   footerText: {
+    margin: 10,
     fontSize: 40,
     color: '#ddd'
+  },
+  audioProgressBar: {
+    height: 20,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'white',
   },
 });
 
