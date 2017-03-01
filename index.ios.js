@@ -62,21 +62,10 @@ export default class arg0 extends Component {
   }
 
   playAudio = () => {
-
     this.setState({ playingAudio: true });
-
-    this.audioTimeInterval = setInterval(() =>{
-      story[0].audio.getCurrentTime((audioTime) =>{
-        LayoutAnimation.easeInEaseOut();
-        this.setState({ audioTime });
-      });
-    }, 1000);
-
-    story[0].audio.play(() =>{
-      // set playing to false when sound ends
-      this.setState({ playingAudio: false})
-      clearInterval(this.audioTimeInterval);
-    });
+    story[0].audio.play(this.stopAudio);
+    this.updateAudioTime();
+    this.audioTimeInterval = setInterval(this.updateAudioTime, 1000);
   }
 
   pauseAudio = () => {
@@ -85,14 +74,31 @@ export default class arg0 extends Component {
     clearInterval(this.audioTimeInterval);
   }
 
+  stopAudio = () => {
+    this.setState({
+      playingAudio: false,
+      audioTime: 0,
+    });
+    story[0].audio.stop();
+    clearInterval(this.audioTimeInterval);
+  }
+
   jumpAudio = (deltaSeconds) => {
-    const audioTime = Math.min(
-      story[0].audio.getDuration(),
-      this.state.audioTime + deltaSeconds
-    );
-    story[0].audio.setCurrentTime(audioTime);
-    LayoutAnimation.easeInEaseOut();
-    this.setState({ audioTime });
+    const audioTime = this.state.audioTime + deltaSeconds;
+    if (audioTime > story[0].audio.getDuration()) {
+      this.stopAudio();
+    } else {
+      story[0].audio.setCurrentTime(audioTime);
+      LayoutAnimation.easeInEaseOut();
+      this.setState({ audioTime });
+    }
+  }
+
+  updateAudioTime = () => {
+    story[0].audio.getCurrentTime((audioTime) =>{
+      LayoutAnimation.easeInEaseOut();
+      this.setState({ audioTime });
+    });
   }
 
 
