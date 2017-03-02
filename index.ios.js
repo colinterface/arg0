@@ -174,7 +174,7 @@ export default class arg0 extends Component {
                 this.jumpAudio(-15);
               }}
             >
-              <Text style={styles.footerText}>
+              <Text style={styles.footerTextSmall}>
                 {'< 15'}
               </Text>
             </TouchableOpacity>
@@ -196,7 +196,7 @@ export default class arg0 extends Component {
                 this.jumpAudio(15);
               }}
             >
-              <Text style={styles.footerText}>
+              <Text style={styles.footerTextSmall}>
                 {'15 >'}
               </Text>
             </TouchableOpacity>
@@ -234,6 +234,11 @@ const styles = StyleSheet.create({
   footerText: {
     margin: 10,
     fontSize: 40,
+    color: '#ddd'
+  },
+  footerTextSmall: {
+    margin: 10,
+    fontSize: 20,
     color: '#ddd'
   },
   audioProgressBar: {
