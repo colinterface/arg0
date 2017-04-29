@@ -57,7 +57,7 @@ export default class arg0 extends Component {
       },
       playingAudio: false,
       audioTime: 0,
-      userLocation: null,
+      playerCoords: null,
       distance: null,
       waypointIndex: 0,
     };
@@ -72,6 +72,7 @@ export default class arg0 extends Component {
     subscription = DeviceEventEmitter.addListener(
       'locationUpdated',
       ({ coords }) => {
+        this.setState({ playerCoords: coords });
         const { longitude, latitude } = coords;
         this.updateDistance(
           { longitude, latitude },
