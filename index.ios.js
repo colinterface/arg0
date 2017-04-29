@@ -68,7 +68,7 @@ export default class arg0 extends Component {
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
     Location.startUpdatingLocation();
-    Location.setDistanceFilter(5.0);
+    Location.setDistanceFilter(1);
     subscription = DeviceEventEmitter.addListener(
       'locationUpdated',
       ({ coords }) => {
