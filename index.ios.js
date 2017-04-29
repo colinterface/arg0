@@ -74,9 +74,10 @@ export default class arg0 extends Component {
       ({ coords }) => {
         this.setState({ playerCoords: coords });
         const { longitude, latitude } = coords;
+        const waypoint = waypoints[this.state.waypointIndex];
         this.updateDistance(
           { longitude, latitude },
-          { latitude: 37.708979, longitude: -122.376008 }
+          { latitude: waypoint.latitude, longitude: waypoint.longitude }
         );
       }
     );
