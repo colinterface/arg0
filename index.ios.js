@@ -164,6 +164,67 @@ export default class arg0 extends Component {
     });
   }
 
+  renderAudioPlayer() {
+    return (
+      <View>
+        <View style={styles.audioProgressBar}>
+          <View
+            style={{
+              alignSelf: 'stretch',
+              flex: this.state.audioTime / waypoints[this.state.waypointIndex].audio.getDuration(),
+              backgroundColor: 'blue',
+            }}
+          />
+          <View
+            style={{
+              flex: 1 - this.state.audioTime / waypoints[this.state.waypointIndex].audio.getDuration(),
+            }}
+          />
+          <View style={styles.footerRow}>
+            <Text style={styles.footerText}>
+              {`${Math.round(this.state.audioTime)} / ${Math.round(waypoints[this.state.waypointIndex].audio.getDuration())}`}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.footerRow}>
+          <TouchableOpacity
+            onPress={() => {
+              this.jumpAudio(-15);
+            }}
+          >
+            <Text style={styles.footerTextSmall}>
+              {'< 15'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (this.state.playingAudio) {
+                this.pauseAudio();
+              } else {
+                this.playAudio();
+              }
+            }}
+          >
+            <Text style={styles.footerText}>
+              {this.state.playingAudio ? '| |' : '|>'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.jumpAudio(15);
+            }}
+          >
+            <Text style={styles.footerTextSmall}>
+              {'15 >'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+    );
+
+  }
 
   render() {
     const { userLocation } = this.state;
@@ -216,80 +277,27 @@ export default class arg0 extends Component {
           <Text style={styles.footerTextSmall}>
             {waypoints[this.state.waypointIndex].description}
           </Text>
-
-            <View style={styles.audioProgressBar}>
-              <View
-                style={{
-                  alignSelf: 'stretch',
-                  flex: this.state.audioTime / waypoints[this.state.waypointIndex].audio.getDuration(),
-                  backgroundColor: 'blue',
-                }}
-              />
-              <View
-                style={{
-                  flex: 1 - this.state.audioTime / waypoints[this.state.waypointIndex].audio.getDuration(),
-                }}
-              />
-            <View style={styles.footerRow}>
-              <Text style={styles.footerText}>
-                {`${Math.round(this.state.audioTime)} / ${Math.round(waypoints[this.state.waypointIndex].audio.getDuration())}`}
-              </Text>
-            </View>
-
-
-            </View>
-            <View style={styles.footerRow}>
+          { this.state.arrived && this.renderAudioPlayer() }
+          {
+            this.state.waypointIndex < waypoints.length - 1 && this.state.arrived ? (
               <TouchableOpacity
                 onPress={() => {
-                  this.jumpAudio(-15);
+                  this.nextWaypoint();
                 }}
               >
+
                 <Text style={styles.footerTextSmall}>
-                  {'< 15'}
+                  {'next chapter'}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.state.playingAudio) {
-                    this.pauseAudio();
-                  } else {
-                    this.playAudio();
-                  }
-                }}
-              >
-                <Text style={styles.footerText}>
-                  {this.state.playingAudio ? '| |' : '|>'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  this.jumpAudio(15);
-                }}
-              >
-                <Text style={styles.footerTextSmall}>
-                  {'15 >'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            {
-              this.state.waypointIndex < waypoints.length - 1 && this.state.arrived ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.nextWaypoint();
-                  }}
-                >
-
-                  <Text style={styles.footerTextSmall}>
-                    {'next chapter'}
-                  </Text>
-                </TouchableOpacity>
-              ) : null
-            }
+            ) : null
+          }
 
         </View>
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
