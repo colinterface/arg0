@@ -168,6 +168,21 @@ export default class arg0 extends Component {
     return  meters >= 1000 ? `${Math.round(meters / 1000)} km` : `${meters} m`;
   }
 
+  centerOnHalfwayPoint = () => {
+    const { longitude, latitude } = waypoints[this.state.waypointIndex];
+    const { playerCoords } = this.state;
+    const longitudeDelta = (longitude - playerCoords.longitude);
+    const latitudeDelta = (latitude - playerCoords.latitude);
+    console.log(longitudeDelta, latitudeDelta);
+    const mapRegion = {
+      longitude: longitude - (longitudeDelta / 2),
+      latitude: latitude - (latitudeDelta / 2),
+      longitudeDelta: Math.abs(longitudeDelta * 1.5),
+      latitudeDelta: Math.abs(latitudeDelta * 1.5),
+    };
+    this.setState({ mapRegion });
+  }
+
   renderAudioPlayer() {
     return (
       <View>
@@ -259,18 +274,7 @@ export default class arg0 extends Component {
           />
         </MapView>
         <View style={styles.footer}>
-          <TouchableOpacity
-            onPress={() =>{
-              this.setState({
-                mapRegion: {
-                  latitude: 37.708979,
-                  longitude: -122.376008,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                },
-              });
-            }}
-          >
+          <TouchableOpacity onPress={this.centerOnHalfwayPoint}>
             <Text style={styles.footerText}>
               { this.convertDistance(this.state.distance) }
             </Text>
