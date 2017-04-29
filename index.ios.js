@@ -16,6 +16,8 @@ import {
 const { RNLocation: Location } = NativeModules;
 import MapView from 'react-native-maps';
 import Sound from 'react-native-sound';
+import { haversine } from 'node-geo-distance';
+
 Sound.setCategory('Playback');
 
 const audio = new Sound('0.mp3', Sound.MAIN_BUNDLE);
@@ -36,6 +38,7 @@ export default class arg0 extends Component {
       playingAudio: false,
       audioTime: 0,
       userLocation: null,
+      distance: null,
     };
 
     this.audioTimeInterval = null;
@@ -49,8 +52,24 @@ export default class arg0 extends Component {
       'locationUpdated',
       ({ coords }) => {
         const { longitude, latitude } = coords;
+        this.updateDistance(
+          { longitude, latitude },
+          { latitude: 37.708979, longitude: -122.376008 }
+        );
       }
     );
+  }
+
+  updateDistance(coordsA, coordsB) {
+    haversine(coordsA, coordsB, (distance) => {
+      const { radius } = waypoints[this.state.waypointIndex];
+      const roundedDistance = Math.round(distance);
+      this.setState({ distance: roundedDistance });
+      if (roundedDistance <= radius) {
+        this.setState({ arrived: true });
+        this.playAudio();
+      }
+    });
   }
   }
 
@@ -157,7 +176,7 @@ export default class arg0 extends Component {
             }}
           >
             <Text style={styles.footerText}>
-              {'Enter The Portal'}
+              {`${this.state.distance} M`}
             </Text>
           </TouchableOpacity>
           <View style={styles.audioProgressBar}>
