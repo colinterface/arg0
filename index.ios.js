@@ -164,6 +164,10 @@ export default class arg0 extends Component {
     });
   }
 
+  convertDistance(meters) {
+    return  meters >= 1000 ? `${Math.round(meters / 1000)} km` : `${meters} m`;
+  }
+
   renderAudioPlayer() {
     return (
       <View>
@@ -268,7 +272,7 @@ export default class arg0 extends Component {
             }}
           >
             <Text style={styles.footerText}>
-              {`${this.state.distance} M`}
+              { this.convertDistance(this.state.distance) }
             </Text>
           </TouchableOpacity>
           <Text style={styles.footerText}>
