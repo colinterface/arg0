@@ -10,7 +10,10 @@ import {
   StatusBar,
   TouchableOpacity,
   LayoutAnimation,
+  NativeModules,
+  DeviceEventEmitter,
 } from 'react-native';
+const { RNLocation: Location } = NativeModules;
 import MapView from 'react-native-maps';
 import Sound from 'react-native-sound';
 Sound.setCategory('Playback');
@@ -18,6 +21,7 @@ Sound.setCategory('Playback');
 const audio = new Sound('0.mp3', Sound.MAIN_BUNDLE);
 const story = [{ audio }];
 
+var subscription = null;
 export default class arg0 extends Component {
 
   constructor() {
@@ -29,9 +33,9 @@ export default class arg0 extends Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
-      userLocation: null,
       playingAudio: false,
       audioTime: 0,
+      userLocation: null,
     };
 
     this.audioTimeInterval = null;
@@ -39,6 +43,15 @@ export default class arg0 extends Component {
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
+    Location.startUpdatingLocation();
+    Location.setDistanceFilter(5.0);
+    subscription = DeviceEventEmitter.addListener(
+      'locationUpdated',
+      ({ coords }) => {
+        const { longitude, latitude } = coords;
+      }
+    );
+  }
   }
 
   onRegionChange = (mapRegion) => {
