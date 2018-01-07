@@ -75,6 +75,7 @@ export default class arg0 extends Component {
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
+    // this.centerOnHalfwayPoint();
     Location.startUpdatingLocation();
     Location.setDistanceFilter(1);
     subscription = DeviceEventEmitter.addListener(
@@ -110,6 +111,16 @@ export default class arg0 extends Component {
       arrived: false,
       waypointIndex,
     });
+    this.centerOnHalfwayPoint();
+
+    const { latitude, longitude } = waypoints[waypointIndex];
+    const { playerCoords } = this.state;
+
+    this.updateDistance(
+      { latitude, longitude },
+      { latitude: playerCoords.latitude, longitude: playerCoords.longitude }
+    );
+
   }
 
   onRegionChange = (mapRegion) => {
@@ -118,15 +129,16 @@ export default class arg0 extends Component {
 
   getMarkerImage = () => {
     const { longitudeDelta } = this.state.mapRegion;
-    let imageIndex;
+    // let imageIndex;
+    let imageIndex = 0;
 
-    if (longitudeDelta < 0.01) {
-      imageIndex = 2;
-    } else if (longitudeDelta < 0.02) {
-      imageIndex = 1;
-    } else {
-      imageIndex = 0;
-    }
+    // if (longitudeDelta < 0.01) {
+    //   imageIndex = 2;
+    // } else if (longitudeDelta < 0.02) {
+    //   imageIndex = 1;
+    // } else {
+    //   imageIndex = 0;
+    // }
 
     return { uri: `portal${imageIndex}` };
 
@@ -355,6 +367,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: 'white',
+  },
+  audioPlayerContainer: {
+    flexDirection: 'column',
+    alignSelf: 'stretch',
+
   },
 });
 
